@@ -33,7 +33,8 @@ class Poll
 
     def count_votes
         res = Hash.new(0)
-        votes.each {|v| res[v.candidate]+=1 }
+        @candidates.each { |candidate| res[candidate] = 0 }
+        @votes.each { |v| res[v.candidate]+=1 }
         res
     end
 end
