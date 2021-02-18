@@ -30,4 +30,10 @@ class Poll
         end
         @votes.push(vote)
     end
+
+    def count_votes
+        res = Hash.new(0)
+        votes.each {|v| res[v.candidate]+=1 }
+        res
+    end
 end
