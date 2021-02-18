@@ -34,5 +34,17 @@ RSpec.describe Poll do
         expect { poll.add_vote(vote) }.to raise_error Poll::InvalidCandidateError
       end
     end
+
+    context 'with a vote whose voter is duplicated' do
+      it 'raises DuplicatedVoterError' do
+        poll = Poll.new('Awesome Poll', ['Alice', 'Bob'])
+        vote = Vote.new('Miyoshi', 'Alice')
+        dup_vote = Vote.new('Miyoshi', 'Bob')
+
+        poll.add_vote(vote)
+
+        expect { poll.add_vote(dup_vote) }.to raise_error Poll::DuplicatedVoterError
+      end
+    end
   end
 end
