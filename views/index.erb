@@ -4,3 +4,17 @@
     <li><a href="/polls/<%= i %>"><%= poll.title %></a></li>
   <% end %>
 </ul>
+
+<h2>新規投票</h2>
+<form action="/polls/create" method="post">
+  <label for="title">タイトル</label>
+  <input id="title" name="title" type="text">
+
+  <label for="candidates">候補名（半角カンマ区切り）</label>
+  <input id="candidates" name="candidates" type="text">
+
+  <label for="expiresAt">期限</label>
+  <input id="expiresAt" name="expiresAt" type="date">
+
+  <input type="submit" value="投票作成">
+</form>

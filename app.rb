@@ -20,6 +20,18 @@ get '/polls/:id' do
     erb :poll, locals: { index: index, poll: poll }
 end
 
+post '/polls/create' do
+    title = params['title']
+    candidates = params['candidates'].split(/,/)
+    expiredAt = params['expiredAt']
+
+    poll = Poll.new(title, candidates, expiredAt)
+
+    $polls.push(poll)
+
+    redirect to("/"), 303
+end
+
 get '/polls/:id/result' do
     index = params['id'].to_i
     poll = $polls[index]
