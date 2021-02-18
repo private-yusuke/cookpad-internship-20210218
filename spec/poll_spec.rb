@@ -1,5 +1,8 @@
 require_relative '../lib/poll'
 
+expired_date = Date.new(1970, 1, 1)
+valid_date = Date.today + 2
+
 RSpec.describe Poll do
   it 'has a title and candidates' do
     poll = Poll.new('Awesome Poll', ['Alice', 'Bob'])
@@ -9,11 +12,11 @@ RSpec.describe Poll do
   end
 
   it 'may have an expiration date' do
-    poll = Poll.new('Awesome Poll', ['Alice', 'Bob'], Date.new(2021, 2, 18))
+    poll = Poll.new('Awesome Poll', ['Alice', 'Bob'], valid_date)
 
     expect(poll.title).to eq 'Awesome Poll'
     expect(poll.candidates).to eq ['Alice', 'Bob']
-    expect(poll.expiresAt).to eq Date.new(2021, 2, 18)
+    expect(poll.expiresAt).to eq valid_date
   end
 
   describe '#add_vote' do
@@ -44,6 +47,15 @@ RSpec.describe Poll do
         poll.add_vote(vote)
 
         expect { poll.add_vote(dup_vote) }.to raise_error Poll::DuplicatedVoterError
+      end
+    end
+
+    context 'to an expired poll' do
+      it 'raises VoteToExpiredPollError' do
+        poll = Poll.new('Awesome Poll', ['Alice', 'Bob'], expired_date)
+        vote = Vote.new('Miyoshi', 'Alice')
+
+        expect { poll.add_vote(vote) }.to raise_error Poll::VoteToExpiredPollError
       end
     end
   end

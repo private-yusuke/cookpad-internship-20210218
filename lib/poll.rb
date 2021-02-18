@@ -7,8 +7,11 @@ class Poll
     class DuplicatedVoterError < StandardError
     end
 
+    class VoteToExpiredPollError < StandardError
+    end
+
     attr_reader :title, :candidates, :expiresAt, :votes
-    def initialize(title, candidates, expiresAt = Date.new)
+    def initialize(title, candidates, expiresAt = Date.today + 1)
         @title = title
         @candidates = candidates
         @expiresAt = expiresAt
@@ -21,6 +24,9 @@ class Poll
         end
         if votes.each.any? {|v| votes.count {|v2| v2.voter == v.voter}}
             raise DuplicatedVoterError
+        end
+        if @expiresAt < Date.today
+            raise VoteToExpiredPollError
         end
         @votes.push(vote)
     end
