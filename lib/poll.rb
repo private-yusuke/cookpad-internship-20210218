@@ -22,7 +22,7 @@ class Poll
         unless candidates.include?(vote.candidate)
             raise InvalidCandidateError
         end
-        if votes.each.any? {|v| votes.count {|v2| v2.voter == v.voter}}
+        if votes.map {|v| v.voter}.include?(vote.voter)
             raise DuplicatedVoterError
         end
         if @expiresAt < Date.today
