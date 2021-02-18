@@ -1,0 +1,11 @@
+<h1>投票結果</h1>
+<dl>
+  <% poll.count_votes.each do |key, value| %>
+    <dt><%= key %></dt>
+    <dd><%= value %></dd>
+  <% end %>
+</dl>
+
+<p>
+  <a href="/polls/<%= index %>">戻る</a>
+</p>
