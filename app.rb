@@ -23,9 +23,9 @@ end
 post '/polls/create' do
     title = params['title']
     candidates = params['candidates'].split(/,/)
-    expiredAt = params['expiredAt']
+    expiresAt = Date.parse(params['expiresAt'])
 
-    poll = Poll.new(title, candidates, expiredAt)
+    poll = Poll.new(title, candidates, expiresAt)
 
     $polls.push(poll)
 
@@ -51,4 +51,6 @@ post '/polls/:id/votes' do
     redirect to("/polls/#{index}"), 303
 rescue Poll::InvalidCandidateError
     halt 400, '不正な候補名です'
+rescue Poll::VoteToExpiredPollError
+    halt 400, '期限が切れた投票です'
 end
